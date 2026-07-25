@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reagile Moatshe — Field Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #EDE6D6;
+    --paper-dark: #E2D9C4;
+    --ink: #16241C;
+    --forest: #1F3A2E;
+    --moss: #5C7A5A;
+    --ochre: #A97727;
+    --ochre-soft: #C79A4B;
+    --line: rgba(22,36,28,0.18);
+    --card: #F5F1E6;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  /* topographic contour texture */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image:
+      repeating-radial-gradient(circle at 12% 18%, transparent 0, transparent 26px, var(--line) 27px, transparent 28px),
+      repeating-radial-gradient(circle at 88% 82%, transparent 0, transparent 34px, var(--line) 35px, transparent 36px),
+      repeating-radial-gradient(circle at 92% 8%, transparent 0, transparent 20px, var(--line) 21px, transparent 22px);
+    background-size: 100% 100%;
+  }
+
+  .wrap{ position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--moss);
+  }
+
+  h1, h2, h3{ font-family:'Fraunces', serif; margin:0; color: var(--forest); }
+
+  a{ color: var(--forest); }
+
+  /* HERO */
+  .hero{
+    padding: 96px 0 72px;
+    border-bottom: 1px solid var(--line);
+  }
+  .coord{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--moss);
+    letter-spacing: 0.04em;
+  }
+  .hero h1{
+    font-size: clamp(42px, 7vw, 84px);
+    font-weight: 600;
+    line-height: 0.98;
+    margin: 14px 0 6px;
+    font-variation-settings: "opsz" 144;
+  }
+  .hero .role{
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--moss);
+    font-weight: 400;
+    margin-bottom: 28px;
+  }
+  .hero .about{
+    max-width: 620px;
+    font-size: 17px;
+  }
+  .hero-meta{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin-top: 32px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .hero-meta span{ opacity: 0.85; }
+
+  /* SPECIMEN LABEL - signature card style used throughout */
+  .label-card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    position: relative;
+    padding: 28px 30px;
+  }
+  .label-card::before{
+    content:"";
+    position:absolute; inset: 6px;
+    border: 1px dashed rgba(22,36,28,0.28);
+    pointer-events:none;
+  }
+  .label-tag{
+    position:absolute;
+    top: -11px; left: 24px;
+    background: var(--forest);
+    color: var(--paper);
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+  }
+
+  section{ padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+
+  .section-head{ display:flex; align-items:baseline; gap: 16px; margin-bottom: 36px; }
+  .section-head h2{ font-size: 30px; font-weight: 600; }
+  .section-head .eyebrow{ white-space: nowrap; }
+
+  /* EDUCATION timeline */
+  .timeline{ display:flex; flex-direction:column; gap: 0; }
+  .tl-item{
+    display:grid;
+    grid-template-columns: 130px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .tl-item:first-child{ border-top: none; }
+  .tl-when{ font-family:'JetBrains Mono', monospace; font-size: 13px; color: var(--ochre); padding-top: 3px; }
+  .tl-title{ font-weight: 600; font-size: 17px; color: var(--forest); }
+  .tl-sub{ font-size: 14px; color: var(--moss); margin-top: 2px; }
+
+  /* SKILLS */
+  .skill-groups{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 28px; }
+  .skill-group h3{ font-size: 15px; text-transform: uppercase; letter-spacing: 0.06em; font-family:'JetBrains Mono', monospace; color: var(--moss); font-weight: 500; margin-bottom: 14px; }
+  .pill-row{ display:flex; flex-wrap: wrap; gap: 8px; }
+  .pill{
+    border: 1px solid var(--forest);
+    color: var(--forest);
+    font-size: 13px;
+    padding: 6px 12px;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  /* EXPERIENCE */
+  .exp-item{ padding: 20px 0; border-top: 1px solid var(--line); }
+  .exp-item:first-child{ border-top: none; }
+  .exp-row{ display:flex; justify-content: space-between; align-items:baseline; flex-wrap: wrap; gap: 8px; }
+  .exp-role{ font-weight: 600; font-size: 17px; color: var(--forest); }
+  .exp-org{ font-size: 14px; color: var(--moss); font-family:'JetBrains Mono', monospace; }
+  .exp-desc{ margin-top: 6px; font-size: 15px; max-width: 640px; }
+
+  /* PROJECTS grid of specimen cards */
+  .proj-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; margin-top: 8px; }
+  .proj-card{ margin-top: 14px; }
+  .proj-num{ font-family:'JetBrains Mono', monospace; font-size: 12px; color: var(--ochre); }
+  .proj-title{ font-size: 20px; margin: 6px 0 10px; }
+  .proj-field{ margin-bottom: 10px; }
+  .proj-field-label{ font-family:'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--moss); margin-bottom: 3px; }
+  .proj-field-value{ font-size: 14.5px; }
+  .tech-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top: 4px; }
+  .tech-tag{ font-family:'JetBrains Mono', monospace; font-size: 11.5px; color: var(--forest); border: 1px solid var(--moss); padding: 3px 8px; }
+  .result-line{ margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 14.5px; }
+  .result-line strong{ color: var(--forest); }
+
+  /* CERTS */
+  .cert-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; }
+  .cert-item{ border: 1px solid var(--line); padding: 16px 18px; background: var(--card); }
+  .cert-item .cname{ font-weight: 600; color: var(--forest); font-size: 15px; }
+  .cert-item .cprov{ font-family:'JetBrains Mono', monospace; font-size: 12px; color: var(--moss); margin-top: 3px; }
+  .cert-status{ display:inline-block; margin-top: 8px; font-family:'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ochre); }
+
+  footer{ padding: 56px 0 80px; }
+  .contact-row{ display:flex; flex-wrap: wrap; gap: 28px; align-items:center; }
+  .contact-row a{ text-decoration: none; font-family:'JetBrains Mono', monospace; font-size: 14px; border-bottom: 1px solid var(--forest); padding-bottom: 2px; }
+  .foot-note{ margin-top: 28px; font-size: 13px; color: var(--moss); }
+
+  @media (max-width: 640px){
+    .tl-item{ grid-template-columns: 90px 1fr; }
+    .wrap{ padding: 0 20px; }
+    .hero{ padding: 64px 0 48px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <section class="hero" style="border-bottom:none;">
+    <div class="coord">25.4753° S, 27.8956° E · SOSHANGUVE, SOUTH AFRICA</div>
+    <h1>Reagile Moatshe</h1>
+    <div class="role">BSc Biological Sciences · Data Science &amp; GIS in progress</div>
+    <p class="about">
+      Undergraduate biological sciences student at Sol Plaatje University with a developing interest in
+      artificial intelligence, data science, and geographic information systems. Currently building
+      foundational skills in data analytics, data engineering, and AI through structured training and
+      independent, hands-on project work — with a particular interest in applying data and spatial
+      technologies to scientific and real-world challenges across Africa.
+    </p>
+    <div class="hero-meta">
+      <span>073 055 4473</span>
+      <span>moatshereagile@gmail.com</span>
+      <span>English · Setswana</span>
+      <span>Willing to relocate</span>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="section-head">
+      <h2>Education</h2>
+      <span class="eyebrow">— field record</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-when">In progress</div>
+        <div>
+          <div class="tl-title">BSc Biological Sciences</div>
+          <div class="tl-sub">Sol Plaatje University</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Exp. 2026</div>
+        <div>
+          <div class="tl-title">Azure AI Engineer Associate</div>
+          <div class="tl-sub">Microsoft</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">In progress</div>
+        <div>
+          <div class="tl-title">Data Engineering</div>
+          <div class="tl-sub">ALX Africa</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">In progress</div>
+        <div>
+          <div class="tl-title">Data Analytics</div>
+          <div class="tl-sub">ALX Africa</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">2023</div>
+        <div>
+          <div class="tl-title">Matric (Basic Education)</div>
+          <div class="tl-sub">Amandasig Secondary School</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head">
+      <h2>Skills</h2>
+      <span class="eyebrow">— instruments &amp; methods</span>
+    </div>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>Technical</h3>
+        <div class="pill-row">
+          <span class="pill">Python</span>
+          <span class="pill">Pandas</span>
+          <span class="pill">Jupyter Notebook</span>
+          <span class="pill">Machine Learning</span>
+          <span class="pill">GIS / ArcGIS Pro</span>
+          <span class="pill">Data Analysis</span>
+          <span class="pill">Data Visualization</span>
+          <span class="pill">Git / GitHub</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Office &amp; Tools</h3>
+        <div class="pill-row">
+          <span class="pill">Microsoft Excel</span>
+          <span class="pill">Microsoft Word</span>
+          <span class="pill">Microsoft PowerPoint</span>
+          <span class="pill">Computer Literacy</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Working with People</h3>
+        <div class="pill-row">
+          <span class="pill">Public Speaking</span>
+          <span class="pill">Team Collaboration</span>
+          <span class="pill">Communication</span>
+          <span class="pill">Client Interaction</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="section-head">
+      <h2>Experience</h2>
+      <span class="eyebrow">— observations logged</span>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-row">
+        <div class="exp-role">GX Africa Ambassador</div>
+        <div class="exp-org">GX Africa · Current</div>
+      </div>
+      <div class="exp-desc">Represents GX Africa initiatives within the student community, promoting awareness of technology, climate education, and digital innovation opportunities.</div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-row">
+        <div class="exp-role">Community &amp; Engagement Officer</div>
+        <div class="exp-org">Units on Birbek – Rise Student Living · Current</div>
+      </div>
+      <div class="exp-desc">House Committee member bridging communication between management and students in the residence.</div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-row">
+        <div class="exp-role">Botany Tutor</div>
+        <div class="exp-org">Sol Plaatje University · Feb 2025 – Jun 2025</div>
+      </div>
+      <div class="exp-desc">Tutored first-year students in introductory botany concepts and supported their academic understanding and study skills.</div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <span class="eyebrow">— specimen sheets</span>
+    </div>
+
+    <div class="proj-grid">
+
+      <div class="label-card proj-card">
+        <div class="label-tag">SPECIMEN 01</div>
+        <div class="proj-num">IndabaX Botswana Hackathon 2026</div>
+        <h3 class="proj-title">Food Price Inflation Forecasting</h3>
+        <div class="proj-field">
+          <div class="proj-field-label">Problem</div>
+          <div class="proj-field-value">Forecast Botswana's monthly food price inflation for 2024 by integrating five macroeconomic and price datasets.</div>
+        </div>
+        <div class="proj-field">
+          <div class="proj-field-label">My role</div>
+          <div class="proj-field-value">Led data merging and feature engineering across five datasets (Baltic Dry Index, Brent Crude Oil, Botswana Policy Rate, FAO Botswana Prices, cross-country CPI), and conducted HCP linkage analysis using Granger causality tests and OLS regression against regional comparator CPI series. Organized all technical deliverables — notebooks, README, reports.</div>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span><span class="tech-tag">Pandas</span><span class="tech-tag">LSTM</span><span class="tech-tag">XGBoost</span><span class="tech-tag">Git</span>
+        </div>
+        <div class="result-line"><strong>Result:</strong> Final model was an LSTM deep learning network, benchmarked against an XGBoost baseline that outperformed a classical SARIMA approach.</div>
+      </div>
+
+      <div class="label-card proj-card">
+        <div class="label-tag">SPECIMEN 02</div>
+        <div class="proj-num">IndabaX Botswana Hackathon</div>
+        <h3 class="proj-title">Economic Forecasting — Deep Learning</h3>
+        <div class="proj-field">
+          <div class="proj-field-label">Problem</div>
+          <div class="proj-field-value">Develop an AI-driven solution to improve economic forecasting by integrating multiple datasets and identifying meaningful factors influencing economic trends.</div>
+        </div>
+        <div class="proj-field">
+          <div class="proj-field-label">My role</div>
+          <div class="proj-field-value">Collaborated with an international multidisciplinary team, contributing to data preparation and dataset merging, participating in feature engineering discussions, and helping organize project documentation and notebooks.</div>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span><span class="tech-tag">Jupyter</span><span class="tech-tag">Pandas</span><span class="tech-tag">Git/GitHub</span><span class="tech-tag">ML</span>
+        </div>
+        <div class="result-line"><strong>Result:</strong> Contributed to a complete forecasting workflow while gaining practical experience in data preprocessing, ML pipelines, and collaborative software development.</div>
+      </div>
+
+      <div class="label-card proj-card">
+        <div class="label-tag">SPECIMEN 03</div>
+        <div class="proj-num">AfAS 2026 Student Hackathon · Winning Team</div>
+        <h3 class="proj-title">Data-Driven Solution Challenge</h3>
+        <div class="proj-field">
+          <div class="proj-field-label">Problem</div>
+          <div class="proj-field-value">Develop a data-driven solution to a real-world challenge within a limited hackathon timeframe.</div>
+        </div>
+        <div class="proj-field">
+          <div class="proj-field-label">My role</div>
+          <div class="proj-field-value">Worked closely with teammates to analyze data, contribute ideas, and present the final solution — assisting with problem-solving, interpreting results, and communicating technical findings.</div>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">Python</span><span class="tech-tag">Data Analysis</span><span class="tech-tag">Data Viz</span><span class="tech-tag">Presenting</span>
+        </div>
+        <div class="result-line"><strong>Result:</strong> Team won the AfAS 2026 Student Hackathon, demonstrating strong teamwork, analytical thinking, and effective technical communication.</div>
+      </div>
+
+      <div class="label-card proj-card">
+        <div class="label-tag">SPECIMEN 04</div>
+        <div class="proj-num">Independent / Coursework</div>
+        <h3 class="proj-title">GIS Spatial Analysis Projects</h3>
+        <div class="proj-field">
+          <div class="proj-field-label">Problem</div>
+          <div class="proj-field-value">Use geospatial data to support environmental and resource-related decision-making through spatial analysis and visualization.</div>
+        </div>
+        <div class="proj-field">
+          <div class="proj-field-label">My role</div>
+          <div class="proj-field-value">Collected, processed, and analyzed spatial datasets, produced maps, and interpreted geographic patterns to generate actionable insights.</div>
+        </div>
+        <div class="tech-tags">
+          <span class="tech-tag">ArcGIS Pro</span><span class="tech-tag">GIS</span><span class="tech-tag">Spatial Analysis</span><span class="tech-tag">Excel</span>
+        </div>
+        <div class="result-line"><strong>Result:</strong> Produced clear visualizations and analyses that improved understanding of spatial patterns and strengthened GIS and analytical skills.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="certifications">
+    <div class="section-head">
+      <h2>Certifications &amp; Training</h2>
+      <span class="eyebrow">— catalogued</span>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-item">
+        <div class="cname">Azure AI Engineer Associate</div>
+        <div class="cprov">Microsoft</div>
+        <div class="cert-status">In progress</div>
+      </div>
+      <div class="cert-item">
+        <div class="cname">Data Engineering</div>
+        <div class="cprov">ALX Africa</div>
+        <div class="cert-status">In progress</div>
+      </div>
+      <div class="cert-item">
+        <div class="cname">Data Analytics</div>
+        <div class="cprov">ALX Africa</div>
+        <div class="cert-status">In progress</div>
+      </div>
+      <div class="cert-item">
+        <div class="cname">Data Analytics</div>
+        <div class="cprov">Nemisa Training Institute</div>
+        <div class="cert-status">In progress</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="section-head" style="margin-bottom: 20px;">
+      <h2 style="font-size:24px;">Get in touch</h2>
+    </div>
+    <div class="contact-row">
+      <a href="mailto:moatshereagile@gmail.com">moatshereagile@gmail.com</a>
+      <a href="tel:0730554473">073 055 4473</a>
+    </div>
+    <div class="foot-note">Based in Soshanguve, Gauteng, South Africa — open to relocating.</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
